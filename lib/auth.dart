@@ -17,6 +17,7 @@ class Auth extends StatelessWidget {
            if(FirebaseAuth.instance.currentUser !=null) {
              Navigator.pushNamed(context,'/');
 
+
            }
              return const Homescreen();
 
