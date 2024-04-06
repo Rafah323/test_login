@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class pagetow extends StatefulWidget {
@@ -9,7 +10,23 @@ class pagetow extends StatefulWidget {
 }
 
 class _pagetowState extends State<pagetow> {
+  bool secourTxet =true;
+  final _emailController=TextEditingController();
+  final _passwordCntroller=TextEditingController();
+
+  Future signIn() async{
+    await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailController.text.trim(), password: _passwordCntroller.text.trim(),);
+  }
+  void openSignupScreen(){
+    Navigator.of(context).pushReplacementNamed('/sigbupscreen');
+  }
   @override
+  void dispose(){
+    super.dispose();
+    _emailController.dispose();
+    _passwordCntroller.dispose();
+    
+  }
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -36,87 +53,100 @@ class _pagetowState extends State<pagetow> {
                 const SizedBox(
                   height: 50,
                 ),
-                Container(
+                Container (
                   child: Column(children: [
-                    Container(
+                    Container (
                       width: 300,
                       height: 50,
                       child: TextFormField(
+                        controller: _emailController,
                         decoration: InputDecoration(
-                            prefix: Icon(Icons.email),
-                            hintText: "email",
+                            prefix: const Icon (Icons.email),
+                            hintText: "Email",
                             fillColor: Colors.white,
                             filled: true,
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(25),
                                 borderSide:
-                                    BorderSide(color: Colors.blue, width: 1))),
+                                  const  BorderSide (color: Colors.blue, width: 1))),
                       ),
                     ),
-                    SizedBox(
+                   const SizedBox (
                       height: 20,
                     ),
-                    Container(
+                    Container (
                       width: 300,
                       height: 50,
                       child: TextField(
-                        obscureText: true,
+                        controller:  _passwordCntroller,
+                        obscureText: secourTxet,
                         decoration: InputDecoration(
-                            prefix: Icon(Icons.lock),
+                            prefix:const Icon (Icons.lock),
                             hintText: "password",
+                            suffixIcon: IconButton(onPressed: (){
+                              setState(() {
+                                secourTxet=!secourTxet;
+                              });
+                            },icon: Icon(secourTxet ? Icons.visibility_off:Icons.visibility),),
                             fillColor: Colors.white,
                             filled: true,
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(25),
                                 borderSide:
-                                    BorderSide(color: Colors.blue, width: 1))),
+                                  const  BorderSide (color: Colors.blue, width: 1))),
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      width: 300,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "log in",
-                          style: TextStyle(
-                              color: Colors.pink[700],
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20),
+                   const SizedBox (height: 10,),
+                    GestureDetector(
+                     onTap:()async=> signIn(),
+                      child: Container(
+                        width: 300,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "log in",
+                            style: TextStyle(
+                                color: Colors.pink[700],
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
                         ),
                       ),
                     ),
                     Container(
                       width: 300,
                       height: 200,
-                      margin: EdgeInsets.only(top: 125),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      margin: const EdgeInsets.only (top: 125),
+                      child: Row (
+                        mainAxisAlignment:  MainAxisAlignment.center,
                         children: [
-                          Text(
-                            "Create Account",
-                            style: TextStyle(
+                          const Text (
+                            "Not yat a member?",
+                            style: TextStyle (
+                              fontSize: 17,
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(
-                            width: 10,
+                          const SizedBox (
+                            width:10,
                           ),
-                          Text("|"),
-                          Text(
-                            "    Forget passowrd",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
+
+                          GestureDetector(
+                            onTap: openSignupScreen,
+                            child: const Text (
+                              "Sign up now",
+                              style: TextStyle (
+                                fontSize: 17,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
-                          SizedBox(
-                            width: 10,
+                          const SizedBox (
+                            width: 10
                           ),
                         ],
                       ),
